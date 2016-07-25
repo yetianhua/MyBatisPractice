@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2009-2016 the original author or authors. Licensed under the 
+	Apache License, Version 2.0 (the "License"); you may not use this file except 
+	in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
+	Unless required by applicable law or agreed to in writing, software distributed 
+	under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES 
+	OR CONDITIONS OF ANY KIND, either express or implied. See the License for 
+	the specific language governing permissions and limitations under the License. -->
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace使得多个配置文件的select标签不会冲突 -->
+<!-- namespace的使用：在查询的时候写上namespace.queryMessageList -->
+<mapper namespace="iter.IMessageXML">
+	<!-- type:映射类的全名称;id:一个标示符，只需在resultMap范围内不冲突就可以了 -->
+	<resultMap type="bean.Message" id="MessageResult">
+		<!-- id标签：存放表的主键 -->
+		<!-- column:数据库的字段名，property:映射类对应的属性，jdbcType：java.sql.Types中查找 -->
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<!-- result标签：存放表中除了主键之外的其他字段 -->
+		<result column="command" jdbcType="VARCHAR" property="command" />
+		<result column="description" jdbcType="VARCHAR" property="description" />
+		<result column="content" jdbcType="VARCHAR" property="content" />
+	</resultMap>
+	<!-- resultMap：找到对应的resultMap标签， 它会找到resultMap标签的属性，并将查到的内容放入到对应的属性， 如果查询出来的字段没有对应的属性则不管，如果resultMap的属性没有对应查询的字段则该属性为null -->
+	<!-- parameterType：传递变量的参数的类型，而且只能传递一个参数，如果使用到多个参数需要将多个参数封装到一个类中，这时使用参数需要使用ognl表达式 -->
+	<select id="queryMessageList" parameterType="bean.Message"
+		resultMap="MessageResult">
+		select id,command,description,content from message where 1 = 1
+		<!--if标签使用ognl表达式： ognl表达式是一个功能强大的表达式，表现在ognl表达式能够支持java语法 -->
+		<!-- 这里的#{command}虽然是ognl表达式的写法，但并不是ognl表达式，这里只是mybatis自己封装的 -->
+		<!-- 注意：这里的"and"前并没有空格，如果是拼接字符串则会出错，但mybatis会自动帮我们加上空格 -->
+		<if test="command != null and !&quot;&quot;.equals(command.trim())">and command like '%' #{command} '%'</if>
+		<if test="description != null and !&quot;&quot;.equals(description.trim())">and description like '%' #{description} '%'</if>
+
+	</select>
+
+	<select id="queryMessageListByPage" parameterType="java.util.Map"
+		resultMap="MessageResult">
+		select id,command,description,content from message
+		<where>
+			<!--if标签使用ognl表达式： ognl表达式是一个功能强大的表达式，表现在ognl表达式能够支持java语法 -->
+			<!-- 这里的#{command}虽然是ognl表达式的写法，但并不是ognl表达式，这里只是mybatis自己封装的 -->
+			<!-- 注意：这里的"and"前并没有空格，如果是拼接字符串则会出错，但mybatis会自动帮我们加上空格 -->
+			<if test="command != null and !&quot;&quot;.equals(command.trim())">and command like '%' #{message.command} '%'</if>
+			<if
+				test="description != null and !&quot;&quot;.equals(description.trim())">and description like '%' #{message.description} '%'</if>
+		</where>
+	</select>
+
+	<select id="count" resultType="int">
+		select count(1) from message
+	</select>
+
+	<delete id="deleteOne" parameterType="int">
+		delete from message where
+		id = #{_parameter}
+	</delete>
+
+	<delete id="deleteBatch" parameterType="java.util.List">
+		delete from message where id in (
+		<foreach collection="list" item="item" separator=",">
+			#{item}
+		</foreach>
+		)
+	</delete>
+
+</mapper>

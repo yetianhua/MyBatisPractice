@@ -1,0 +1,58 @@
+<!DOCTYPE web-app PUBLIC
+ "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+ "http://java.sun.com/dtd/web-app_2_3.dtd" >
+
+<web-app>
+	<filter>
+		<filter-name>CharsetFilter</filter-name>
+		<filter-class>filter.CharsetFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>CharsetFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
+	<display-name>Archetype Created Web Application</display-name>
+
+	<servlet>
+		<servlet-name>MessageList</servlet-name>
+		<servlet-class>servlet.MessageListServlet</servlet-class>
+	</servlet>
+	<servlet>
+		<servlet-name>DeleteOne</servlet-name>
+		<servlet-class>servlet.DeleteOneServlet</servlet-class>
+	</servlet>
+	<servlet>
+		<servlet-name>DeleteBatch</servlet-name>
+		<servlet-class>servlet.DeleteBatchServlet</servlet-class>
+	</servlet>
+	<servlet>
+		<servlet-name>InitTalkServlet</servlet-name>
+		<servlet-class>servlet.InitTalkServlet</servlet-class>
+	</servlet>
+	<servlet>
+		<servlet-name>AutoReplyServlet</servlet-name>
+		<servlet-class>servlet.AutoReplyServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>MessageList</servlet-name>
+		<url-pattern>/MessageList</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>DeleteOne</servlet-name>
+		<url-pattern>/deleteOne</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>DeleteBatch</servlet-name>
+		<url-pattern>/deleteBatch</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>InitTalkServlet</servlet-name>
+		<url-pattern>/initTalkServlet</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>AutoReplyServlet</servlet-name>
+		<url-pattern>/AutoReplyServlet</url-pattern>
+	</servlet-mapping>
+</web-app>
